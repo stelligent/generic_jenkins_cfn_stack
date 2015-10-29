@@ -29,10 +29,6 @@ service "jenkins" do
   action :restart
 end
 
-jenkins_command 'start job-seed' do
-  command 'build job-seed'
-end
-
 cookbook_file "script to add Jenkins global variables" do
   source "create_user.groovy"
   path "/tmp/create_user.groovy"
