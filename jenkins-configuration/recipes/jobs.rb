@@ -20,8 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-params = node['pipeline']['jobs'].collect { |job| {  :name => job,  :source => "#{job}.xml.erb",  :target => "/var/tmp/#{job}.xml" } }
+params = {}
 
+# if node['pipeline']['jobs'] was defined, iterate over it to define an
+# intermediate variable for instantiating Jenkins jobs from xml templates
+if node['pipeline'] && node['pipeline']['jobs']
+  params = node['pipeline']['jobs'].collect do |job|
+    { name: job,  source: "#{job}.xml.erb", target: "/var/tmp/#{job}.xml" }
+  end
+end
 
 params.each do |param|
 
