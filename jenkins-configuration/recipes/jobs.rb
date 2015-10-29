@@ -36,10 +36,8 @@ params.each do |param|
     source param[:source]
 
     variables(
-      { 
-        :source_repo => node['pipeline']['source'],
-        :branch_specifier => node['pipeline']['branch']
-       }
+      source_repo: node['pipeline']['source'],
+      branch_specifier: node['pipeline']['branch']
     )
   end
 
