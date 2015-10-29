@@ -20,20 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-jenkins_url = "http://localhost:8080"
+jenkins_url = 'http://localhost:8080'
 
-node["pipeline"]["global_vars"].each do |key, value|
+if node['pipeline'] && node['pipeline']['global_vars']
 
-  magic_shell_environment "#{key}" do
-    value "#{value}"
+  node['pipeline']['global_vars'].each do |key, value|
+
+    magic_shell_environment "#{key}" do
+      value "#{value}"
+    end
+
   end
-
 end
 
 bash 'setup profile.d for jenkins user' do
   code <<-END
     echo >> /etc/sysconfig/jenkins
-    echo \# jenkins does not run in a login shell, so we need to force it to load the profile.d entries, which is where magic shell does its magic. >> /etc/sysconfig/jenkins
+    echo '\# jenkins does not run in a login shell, so we need to force \
+    it to load the profile.d entries, which is where magic shell does its \
+    magic.' \
+    >> /etc/sysconfig/jenkins
     echo source /etc/profile >> /etc/sysconfig/jenkins
   END
 end
